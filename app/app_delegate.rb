@@ -1,6 +1,12 @@
 class AppDelegate
   def applicationDidFinishLaunching(notification)
     buildMenu
+
+    @controller = PlayerController.new
+    @mainWindow = @controller.window
+
+    @mainWindow.title = NSBundle.mainBundle.infoDictionary['CFBundleName']
+    @mainWindow.orderFrontRegardless
   end
 
   def openFile
@@ -11,7 +17,7 @@ class AppDelegate
     dialog.allowsMultipleSelection = false
    
     if dialog.runModalForDirectory(nil, file:nil) == NSOKButton
-       p dialog.filenames.first
+       @controller.playVideo(dialog.filenames.first)
     end
   end
 
