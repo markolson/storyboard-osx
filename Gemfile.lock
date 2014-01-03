@@ -12,6 +12,7 @@ GEM
   specs:
     Ascii85 (1.0.2)
     afm (0.2.0)
+    bubble-wrap (1.4.0)
     hashery (2.1.1)
     highline (1.6.20)
     micro-optparse (1.2.0)
@@ -41,5 +42,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bubble-wrap
   storyboard!
   teacup

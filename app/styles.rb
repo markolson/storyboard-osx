@@ -1,5 +1,25 @@
 Teacup::Stylesheet.new :main_window do
-	
+	style :dragarea,
+      frame: [[10, 10], [160, 160]],
+      image: NSImage.imageNamed('dragarea')
+
+  style NSTextField, height: 22, width: 300, enabled: false, selectable: false
+
+  style :filepath, 
+  	origin: [180, 135]
+
+  style :subpath, 
+  	origin: [180, 105]
+
+  style NSButton, width: 110, height: 24, bezelStyle: NSRoundedBezelStyle
+
+  style :filepath_button,
+  	origin: [490, 132],
+  	title: "Pick Video"
+
+  style :subpath_button, 
+  	origin: [490, 102],
+  	title: "Pick Subtitles"
 end
 
 

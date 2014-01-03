@@ -6,8 +6,6 @@ class AppDelegate
     @controller = StoryboardController.new
     @mainWindow = @controller.window
 
-    @mainWindow.backgroundColor = NSColor.whiteColor
-
     @mainWindow.title = NSBundle.mainBundle.infoDictionary['CFBundleName']
     @mainWindow.orderFrontRegardless
   end
