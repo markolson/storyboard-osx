@@ -12,4 +12,5 @@ Motion::Project::App.setup do |app|
   # Use `rake config' to see complete project settings.
   app.name = 'Storyboard'
   app.embedded_frameworks << 'vendor/VLCKit.framework'
+  app.codesign_for_release = false
 end

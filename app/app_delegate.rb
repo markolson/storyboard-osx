@@ -1,27 +1,18 @@
 class AppDelegate
+  attr_accessor :controller, :mainWindow
   def applicationDidFinishLaunching(notification)
     buildMenu
 
-    @controller = PlayerController.new
+    @controller = StoryboardController.new
     @mainWindow = @controller.window
+
+    @mainWindow.backgroundColor = NSColor.whiteColor
 
     @mainWindow.title = NSBundle.mainBundle.infoDictionary['CFBundleName']
     @mainWindow.orderFrontRegardless
   end
 
-  def openFile
-    dialog = NSOpenPanel.openPanel
-    dialog.delegate = self
-    dialog.canChooseFiles = true
-    dialog.canChooseDirectories = false
-    dialog.allowsMultipleSelection = false
-   
-    if dialog.runModalForDirectory(nil, file:nil) == NSOKButton
-       @controller.playVideo(dialog.filenames.first)
-    end
-  end
-
-  def panel(panel, shouldShowFilename: filename)
-    return [".mkv", ".avi", ".mp4"].include? File.extname(filename)
+  def applicationShouldTerminateAfterLastWindowClosed(sender)
+    true
   end
 end
