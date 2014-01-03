@@ -7,6 +7,10 @@ class DragView < NSImageView
   end
 
   def mouseDown(event)
+    openDialog(event)
+  end
+
+  def openDialog(event)
     dialog = NSOpenPanel.openPanel
     dialog.delegate = self
     dialog.canChooseFiles = true
@@ -14,7 +18,7 @@ class DragView < NSImageView
     dialog.allowsMultipleSelection = false
    
     if dialog.runModalForDirectory(nil, file:nil) == NSOKButton
-    	p dialog.filenames.first
+      App.notification_center.post('StoryboardFileSelected', self, dialog.filenames.first)
     end
   end
 
@@ -31,6 +35,7 @@ class DragView < NSImageView
 
     if files.count == 1 && [".avi", ".mkv", ".mov", ".mp4"].include?(File.extname(files.first))
     	self.image = NSImage.imageNamed('dragarea_ok')
+      App.notification_center.post('StoryboardFileSelected', self, files.first)
  			return NSDragOperationCopy
     end
 
