@@ -1,9 +1,71 @@
+Teacup::Stylesheet.new :pick_video_mode do
+  style :box,
+    constraints: [
+      constrain_top(8),
+      constrain_left(8),
+      constrain(:right).equals(:superview, :right).minus(8),
+      constrain_height(80),
+      constrain(:width).at_least(400),
+    ]
+
+  style :label,
+    selectable: false,
+    editable: false,
+    bezeled: false,
+    drawsBackground: false
+
+  style :make_a, extends: :label,
+    constraints: [
+      constrain_top(8),
+      constrain(:left).equals(:superview, :left).plus(8),
+      constrain_width(40),
+    ]
+
+  style :formats,
+    constraints: [
+      constrain(:center_y).equals(:make_a, :center_y),
+      constrain_to_right(:make_a),
+      constrain(:width).at_most(200)
+    ]    
+
+  style :from, extends: :label,
+    constraints: [
+      constrain_below(:make_a, 8),
+      constrain(:left).equals(:superview, :left).plus(8),
+      constrain(:right).equals(:filepath, :left),
+      constrain_width(40),
+    ]
+
+  style :filepath,
+    selectable: false,
+    constraints: [
+      constrain(:center_y).equals(:from, :center_y),
+      constrain_to_right(:from),
+      constrain(:right).equals(:filepath_button, :left).minus(8),
+      constrain(:width).at_most(350),
+      constrain_height(22)
+    ]
+
+  style NSButton, width: 110, height: 24, bezelStyle: NSRoundedBezelStyle
+
+  style :filepath_button,
+    constraints: [
+      constrain(:center_y).equals(:from, :center_y),
+      constrain_right(-8),
+      constrain_size(100,22)
+    ],
+    title: "Choose File"
+
+
+end
+
+
 Teacup::Stylesheet.new :main_window do
 	style :dragarea,
       frame: [[10, 10], [160, 160]],
       image: NSImage.imageNamed('dragarea')
 
-  style NSTextField, height: 22, width: 300, enabled: false, selectable: false
+  style NSTextField, height: 22, width: 300
 
   style :filepath, 
   	origin: [180, 135]

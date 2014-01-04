@@ -9,6 +9,7 @@ class StoryboardController < TeacupWindowController
 
     @filefound = App.notification_center.observe 'StoryboardFileSelected' do |notification|
       pickVideo(notification.userInfo)
+      findSubs(notification.userInfo)
     end
 
     self.window = NSWindow.alloc.initWithContentRect([[400, 400], [600, 180]],
@@ -17,20 +18,29 @@ class StoryboardController < TeacupWindowController
       defer: false)
   end
 
+  def findSubs(path)
+    subtitle_extension = %w(srt sub ssa ass).detect{ |ext| ext = ".#{ext}"; File.exist?(path.gsub(File.extname(path), ext)) }
+    return unless subtitle_extension
+    subtitle_path = path.gsub(File.extname(path), ".#{subtitle_extension}")
+    @subpath.stringValue = subtitle_path
+  end
+
   def pickVideo(path)
     @filepath.stringValue = path
   end
 
 	layout do |view|
+    subview(NSBox, :box) do |box|
+
+    end
+    
     @dragarea = subview(DragView, :dragarea)
 
     @filepath = subview(NSTextField, :filepath)
     @filepath.cell.lineBreakMode = NSLineBreakByTruncatingHead
-    @subpath = subview(NSTextField, :subpath)
 
     @file_button = subview(NSButton, :filepath_button)
     @file_button.target = @dragarea
     @file_button.action = 'openDialog:'
-    @subpath_button = subview(NSButton, :subpath_button)
   end
 end

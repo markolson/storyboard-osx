@@ -3,7 +3,7 @@ class AppDelegate
   def applicationDidFinishLaunching(notification)
     buildMenu
 
-    @controller = StoryboardController.new
+    @controller = StartController.new
     @mainWindow = @controller.window
 
     @mainWindow.title = NSBundle.mainBundle.infoDictionary['CFBundleName']
