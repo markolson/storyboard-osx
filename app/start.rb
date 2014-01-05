@@ -1,20 +1,30 @@
 class StartController < TeacupWindowController
   attr_accessor :filepath, :file_button, :video_types
+
+  attr_accessor :container, :scroll_view
   stylesheet :pick_video_mode
 
   def loadWindow
-		@video_types = [".mov", ".mkv", ".avi", ".mp4"]
+    @height = 100
+    @items = []
+
+    @video_types = [".mov", ".mkv", ".avi", ".mp4"]
     @filefound_notification_handler = App.notification_center.observe 'StoryboardFileSelected' do |notification|
       @filepath.stringValue = notification.userInfo
     end
 
-    self.window = NSWindow.alloc.initWithContentRect([[400, 400], [600, 180]],
+    self.window = NSWindow.alloc.initWithContentRect([[400, 400], [600, 96]],
       styleMask: NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask|NSResizableWindowMask,
       backing: NSBackingStoreBuffered,
       defer: false)
+
+    self.window.setContentMaxSize([600,250])
+    self.window
   end
 
-	def openDialog(event)
+  def openDialog(event)
+    addProgressbar('Scanning File')
+    return
     dialog = NSOpenPanel.openPanel
     dialog.delegate = self
     dialog.canChooseFiles = true
@@ -30,22 +40,65 @@ class StartController < TeacupWindowController
     return (video_types.include? File.extname(filename)) || File.directory?(filename)
   end
 
-	layout do |view|
-		subview(NSBox, :box) do |box|
-			box.title = "Pick Video and Mode"
+  def addProgressbar(named)
+    constraints = [
+      Teacup::Constraint.new(:self, :top).equals(@items.last, :bottom).plus(8),
+      Teacup::Constraint.new(:self, :left).equals(:superview, :left).plus(8),
+      Teacup::Constraint.new(:self, :right).equals(:superview, :right).minus(8),
+      Teacup::Constraint.new(:self, :height).equals(80)
+    ]
 
-			subview(NSTextField, :make_a).setStringValue('Make a')
-			subview(NSTextField, :from).setStringValue('From')
+    layout(container) do
+      instance = subview(NSBox, constraints: constraints)
+      self.window.top_level_view.apply_constraints
 
-			@selector = subview(NSPopUpButton, :formats).addItemsWithTitles(["Book with Storyboard", "GIF with some text", "30 second recap GIF"])
+      @items << instance
+    end
 
-			@filepath = subview(NSTextField, :filepath)
-	    @filepath.cell.lineBreakMode = NSLineBreakByTruncatingHead
-	    @filepath.cell.placeholderString = "Choose a file..."
+    windowFrame = self.window.frame
+    windowFrame.size.height += 88;
 
-	    @file_button = subview(NSButton, :filepath_button)
-	    @file_button.target = @dragarea
-	    @file_button.action = 'openDialog:'
-   	end
+    if windowFrame.size.height <= window.maxSize.height
+      windowFrame.origin.y -= 88;
+      window.setFrame(windowFrame, display:true, animate:true);
+    else
+      windowFrame.size.height = window.maxSize.height
+      windowFrame.origin.y -= (window.maxSize.height - self.window.frame.size.height)
+    window.setFrame(windowFrame, display:true, animate:true);
+    end
+  end
+
+
+  layout do |view|
+
+    @container = subview(NSView, :container_view) do 
+      @items << subview(NSBox, :box) do |box|
+        box.title = "Pick Video and Mode"
+
+        subview(NSTextField, :make_a).setStringValue('Make a')
+        subview(NSTextField, :from).setStringValue('From')
+
+        @selector = subview(NSPopUpButton, :formats).addItemsWithTitles(["Book with Storyboard", "GIF with some text", "30 second recap GIF"])
+
+        @filepath = subview(NSTextField, :filepath)
+        @filepath.cell.lineBreakMode = NSLineBreakByTruncatingHead
+        @filepath.cell.placeholderString = "Choose a file..."
+
+        @file_button = subview(NSButton, :filepath_button)
+        @file_button.target = @dragarea
+        @file_button.action = 'openDialog:'
+      end
+    end
+
+    addProgressbar("test")
+    addProgressbar("test")
+
+    @container.removeFromSuperview
+
+    @scroll_view = subview(NSScrollView, :scroll_view)
+    @container.translatesAutoresizingMaskIntoConstraints = false;
+
+    @scroll_view.setDocumentView(@container)
+    @scroll_view.hasVerticalScroller = true
   end
 end

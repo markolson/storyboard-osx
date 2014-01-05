@@ -1,12 +1,30 @@
 Teacup::Stylesheet.new :pick_video_mode do
+
+  style :scroll_view,
+    constraints: [
+      constrain_top(0),
+      constrain_left(0),
+      constrain_bottom(0),
+      constrain_right(0)
+    ]
+
+  style :container_view,
+    constraints: [
+      constrain_top(0),
+      constrain_left(0),
+      constrain_bottom(0),
+      constrain_right(0)
+    ]
+    
   style :box,
     constraints: [
       constrain_top(8),
       constrain_left(8),
       constrain(:right).equals(:superview, :right).minus(8),
-      constrain_height(80),
+      constrain(:height).at_least(80),
       constrain(:width).at_least(400),
     ]
+
 
   style :label,
     selectable: false,
@@ -18,7 +36,7 @@ Teacup::Stylesheet.new :pick_video_mode do
     constraints: [
       constrain_top(8),
       constrain(:left).equals(:superview, :left).plus(8),
-      constrain_width(40),
+      constrain_width(45),
     ]
 
   style :formats,
@@ -33,7 +51,7 @@ Teacup::Stylesheet.new :pick_video_mode do
       constrain_below(:make_a, 8),
       constrain(:left).equals(:superview, :left).plus(8),
       constrain(:right).equals(:filepath, :left),
-      constrain_width(40),
+      constrain_width(45),
     ]
 
   style :filepath,
