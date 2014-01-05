@@ -41,6 +41,7 @@ class StartController < TeacupWindowController
   end
 
   def addProgressbar(named)
+
     constraints = [
       Teacup::Constraint.new(:self, :top).equals(@items.last, :bottom).plus(8),
       Teacup::Constraint.new(:self, :left).equals(:superview, :left).plus(8),
@@ -49,7 +50,7 @@ class StartController < TeacupWindowController
     ]
 
     layout(container) do
-      instance = subview(NSBox, constraints: constraints)
+      instance = subview(NSBox, left: 0, top: @items.count * 2, height: 80, autoresizingMask: NSViewWidthSizable)
       self.window.top_level_view.apply_constraints
 
       @items << instance
@@ -60,11 +61,20 @@ class StartController < TeacupWindowController
 
     if windowFrame.size.height <= window.maxSize.height
       windowFrame.origin.y -= 88;
-      window.setFrame(windowFrame, display:true, animate:true);
     else
       windowFrame.size.height = window.maxSize.height
       windowFrame.origin.y -= (window.maxSize.height - self.window.frame.size.height)
-    window.setFrame(windowFrame, display:true, animate:true);
+    end
+    window.setFrame(windowFrame, display:true, animate:true)
+
+    if container
+      p container.bounds
+    end
+    if scroll_view
+      p scroll_view.contentSize
+      p scroll_view.contentView.bounds
+      p scroll_view.documentView.bounds
+      p scroll_view.bounds
     end
   end
 
@@ -90,15 +100,16 @@ class StartController < TeacupWindowController
       end
     end
 
-    addProgressbar("test")
-    addProgressbar("test")
 
     @container.removeFromSuperview
+    @container.translatesAutoresizingMaskIntoConstraints = false;
 
     @scroll_view = subview(NSScrollView, :scroll_view)
-    @container.translatesAutoresizingMaskIntoConstraints = false;
+
 
     @scroll_view.setDocumentView(@container)
     @scroll_view.hasVerticalScroller = true
+
+    addProgressbar("test")
   end
 end

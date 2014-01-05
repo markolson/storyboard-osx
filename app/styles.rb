@@ -1,19 +1,20 @@
 Teacup::Stylesheet.new :pick_video_mode do
 
   style :scroll_view,
-    constraints: [
-      constrain_top(0),
-      constrain_left(0),
-      constrain_bottom(0),
-      constrain_right(0)
-    ]
+    frame: NSMakeRect(0, 0, 480, 300),
+    autoresizingMask: autoresize.fill,
+    hasVerticalScroller: true
+
+  style :table_view,
+    autoresizingMask: autoresize.fill
+
 
   style :container_view,
     constraints: [
       constrain_top(0),
       constrain_left(0),
       constrain_bottom(0),
-      constrain_right(0)
+      constrain_right(0),
     ]
     
   style :box,
