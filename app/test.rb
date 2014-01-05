@@ -1,6 +1,7 @@
 class TestController < TeacupWindowController
   attr_accessor :mainWindow,:containerView, :scrollView, :items
 
+  stylesheet :pick_video_mode
   def init
     super
     loadWindow
@@ -30,6 +31,7 @@ class TestController < TeacupWindowController
     containerView.translatesAutoresizingMaskIntoConstraints  = true
     scrollView.documentView = @containerView
 
+    addMain
     addBox("Test One")
     addBox("Test Two")
 
@@ -50,6 +52,27 @@ class TestController < TeacupWindowController
     redrawBoxes
   end
 
+  def addMain
+  layout(@containerView) do |view|
+    @items << subview(NSBox, :box) do |box|
+        box.title = "Pick Video and Mode"
+
+        subview(NSTextField, :make_a).setStringValue('Make a')
+        subview(NSTextField, :from).setStringValue('From')
+
+        @selector = subview(NSPopUpButton, :formats).addItemsWithTitles(["Book with Storyboard", "GIF with some text", "30 second recap GIF"])
+
+        @filepath = subview(NSTextField, :filepath)
+        @filepath.cell.lineBreakMode = NSLineBreakByTruncatingHead
+        @filepath.cell.placeholderString = "Choose a file..."
+
+        @file_button = subview(NSButton, :filepath_button)
+        @file_button.target = @dragarea
+        @file_button.action = 'openDialog:'
+      end
+    end
+  end
+
   def addBox(named)
 
     box = NSBox.alloc.initWithFrame([[8,8],[584,80]])
@@ -57,7 +80,5 @@ class TestController < TeacupWindowController
     box.title = named
     @items << box
     redrawBoxes
-    @scrollView.verticalScroller.floatValue = @items.last.frame.origin.y
-
   end
 end

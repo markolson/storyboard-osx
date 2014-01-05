@@ -17,16 +17,6 @@ Teacup::Stylesheet.new :pick_video_mode do
       constrain_right(0),
     ]
     
-  style :box,
-    constraints: [
-      constrain_top(8),
-      constrain_left(8),
-      constrain(:right).equals(:superview, :right).minus(8),
-      constrain(:height).at_least(80),
-      constrain(:width).at_least(400),
-    ]
-
-
   style :label,
     selectable: false,
     editable: false,
@@ -51,7 +41,6 @@ Teacup::Stylesheet.new :pick_video_mode do
     constraints: [
       constrain_below(:make_a, 8),
       constrain(:left).equals(:superview, :left).plus(8),
-      constrain(:right).equals(:filepath, :left),
       constrain_width(45),
     ]
 
@@ -61,7 +50,7 @@ Teacup::Stylesheet.new :pick_video_mode do
       constrain(:center_y).equals(:from, :center_y),
       constrain_to_right(:from),
       constrain(:right).equals(:filepath_button, :left).minus(8),
-      constrain(:width).at_most(350),
+      constrain(:width).at_most(500),
       constrain_height(22)
     ]
 
